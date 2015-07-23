@@ -1,0 +1,21 @@
+@font-face {
+    font-family: 'Open Sans';
+    src: url("/css/OpenSans-Light.ttf");
+}
+
+body{
+    font-family: 'Open Sans', serif;
+    font-size: 16pt;
+}
+
+.colossal{
+    font-size: 40pt;
+}
+
+.centered-content{
+    text-align: center;
+}
+
+.padding-top-10{
+    padding-top: 100px;
+}
