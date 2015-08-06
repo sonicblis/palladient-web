@@ -1,6 +1,5 @@
-/**
- * Created by chris_000 on 2/23/2015.
- */
+(function(){
+    'use strict';
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
@@ -12,7 +11,7 @@ var reload = browser.reload;
 gulp.task('unify', function() {
     gulp.src('app/**/*.js')
         .pipe(concat('all.js'))
-        .pipe(gulp.dest('dist/'))
+        .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('deploy', shell.task(
@@ -20,9 +19,11 @@ gulp.task('deploy', shell.task(
     {cwd: process.cwd()}
 ));
 
-gulp.task('update', function(){reload();});
+gulp.task('update', function(){
+    reload();
+});
 
-gulp.task('webserver', function() {
+gulp.task('webServer', function() {
     browser({
         server:{
             baseDir: './'
@@ -37,9 +38,10 @@ gulp.task('unify-prod', function() {
     gulp.src('app/**/*.js')
         .pipe(concat('all.js'))
         .pipe(uglify())
-        .pipe(gulp.dest('dist/'))
+        .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('watch', function(){
     gulp.watch('app/**/*.js', ['unify']);
 });
+}());

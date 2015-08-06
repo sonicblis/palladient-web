@@ -1,0 +1,22 @@
+{
+  "jasmine":true,
+  "strict":true,
+  "noempty":true,
+  "noarg":true,
+  "eqeqeq":true,
+  "devel":true,
+  "immed":true,
+  "browser":true,
+  "bitwise":true,
+  "curly":true,
+  "undef":true,
+  "nonew":true,
+  "forin":true,
+  "globals":{
+    "angular": false,
+    "require": false,
+    "process": false,
+    "module": false,
+    "inject": false
+  }
+}
