@@ -1,7 +1,7 @@
 /*jshint globalstrict: true*/
 "use strict";
 
-var app = angular.module("app", []);
+var app = angular.module("app", ['ui.router']);
 
 app.controller('pageController', ['$scope', function($scope){
     $scope.pageName = 'My Hot Page';
@@ -17,11 +17,8 @@ app.directive("indicator", function(){
         restrict: 'E',
         link: function(scope, el, attrs){
             el.addClass("indicator");
-            el.click(
-                function(){
-                    scope.selectedItem = el;
-                }
-            );
         }
     };
 });
+'use strict';
+

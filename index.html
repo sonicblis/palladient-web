@@ -9,6 +9,7 @@
     <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="node_modules/angular/angular.min.js"></script>
+    <script type="text/javascript" src="node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script type="text/javascript" src="dist/all.js"></script>
 
     <title></title>
@@ -24,7 +25,9 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
+
                     <a class="navbar-brand" href="#">Palladient</a>
+                    <img src="img/Phaethon%20Logo_Symbol.png" class="navbar-logo">
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
@@ -52,9 +55,7 @@
                 </div><!--/.nav-collapse -->
             </div><!--/.container-fluid -->
         </nav>
-
-        <div class="padding-top-10 text-center">Welcome to the future site of palladient.com. This is going to blow you away.</div>
-        <div class="colossal text-center">=]</div>
+        <div ui-view></div>
     </div>
 </body>
 </html>

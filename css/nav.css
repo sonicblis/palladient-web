@@ -42,3 +42,15 @@ nav.navbar{
     min-height:10px;
     height: 42px;
 }
+
+.navbar-logo{
+    position: absolute;
+    left: -5px;
+    top: 4px;
+    width: 22px;
+}
+
+.navbar-brand{
+    font-weight: bolder;
+    padding-left: 20px;
+}
