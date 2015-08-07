@@ -53,6 +53,7 @@ nav.navbar{
 .navbar-brand{
     font-weight: bolder;
     padding-left: 20px;
+    font-size: 1.7em;
 }
 @font-face {
     font-family: 'Open Sans';
