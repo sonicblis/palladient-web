@@ -1,9 +1,15 @@
 {
   "name": "application-name",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url":"https://github.com/sonicblis/palladient-web.git"
+  },
+  "description": "The web side of the game changing application known as Palladient",
   "devDependencies": {
     "angular": "^1.4.3",
     "angular-mocks": "^1.4.3",
+    "angular-ui-router": "^0.2.15",
     "bootstrap": "^3.3.5",
     "browser-sync": "^2.8.0",
     "gulp": "^3.9.0",
@@ -12,6 +18,7 @@
     "gulp-uglify": "^1.2.0",
     "gulp-watch": "^4.3.3",
     "jasmine-core": "^2.3.4",
+    "jquery": "^2.1.4",
     "karma": "^0.12.31",
     "karma-coverage": "^0.3.1",
     "karma-jasmine": "^0.3.5",

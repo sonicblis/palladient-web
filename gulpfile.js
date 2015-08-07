@@ -8,11 +8,17 @@ var watch = require('gulp-watch');
 var browser = require('browser-sync');
 var reload = browser.reload;
 
-gulp.task('unify', function() {
-    gulp.src('app/**/*.js')
-        .pipe(concat('all.js'))
-        .pipe(gulp.dest('dist/'));
-});
+    gulp.task('unifyJs', function() {
+        gulp.src('app/**/*.js')
+            .pipe(concat('all.js'))
+            .pipe(gulp.dest('dist/'));
+    });
+
+    gulp.task('unifyCss', function() {
+        gulp.src('css/**/*.css')
+            .pipe(concat('all.css'))
+            .pipe(gulp.dest('dist/'));
+    });
 
 gulp.task('deploy', shell.task(
     ['firebase deploy','firebase open'],
@@ -28,8 +34,9 @@ gulp.task('webServer', function() {
         server:{
             baseDir: './'
         },
-        files: ["index.html","app/**/*.html","dist/all.js","css/**/*.css"]
+        files: 'dist/*.*'
     });
+    gulp.watch("index.html").on('change', browser.reload);
 });
 
 gulp.task('publish', ['unify-prod', 'deploy']);
@@ -42,6 +49,7 @@ gulp.task('unify-prod', function() {
 });
 
 gulp.task('watch', function(){
-    gulp.watch('app/**/*.js', ['unify']);
+    gulp.watch('app/**/*.js', ['unifyJs']);
+    gulp.watch('css/**/*.css', ['unifyCss']);
 });
 }());

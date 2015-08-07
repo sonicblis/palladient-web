@@ -1,0 +1,65 @@
+.nav>li>a:focus, .nav>li>a:hover {
+    background: white;
+}
+
+.nav>li>a>.indicator{
+    border-top: solid 4px transparent;
+    border-bottom: solid 4px transparent;
+    padding: 3px 0;
+}
+
+.nav>li>a>.indicator.active, .nav>li>a>.indicator:hover{
+    border-bottom: solid 6px #a9d596;
+    font-weight: bold;
+}
+
+.navbar-nav>li>a{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.navbar-nav>li.nav-square:not(.preserve-size)>a>i{
+    font-size: 20px;
+}
+
+.navbar-nav>li.nav-square{
+    border: solid 1px #dddddd;
+    background: #eeeeee;
+    margin-right: 2px;
+}
+
+.navbar-nav>li.nav-square:not(.preserve-size)>a{
+    line-height: 10px;
+    padding-top:7px;
+}
+
+.navbar-nav>li.nav-square.preserve-size>a{
+    line-height: 17px;
+}
+
+nav.navbar{
+    border-bottom: solid 1px #ccc;
+    min-height:10px;
+    height: 42px;
+}
+@font-face {
+    font-family: 'Open Sans';
+    src: url("/css/OpenSans-Light.ttf");
+}
+
+body{
+    font-family: 'Open Sans', serif;
+    font-size: 1.5em;
+}
+
+.colossal{
+    font-size: 3em;
+}
+
+.centered-content{
+    text-align: center;
+}
+
+.padding-top-10{
+    padding-top: 100px;
+}
