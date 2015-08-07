@@ -1,3 +1,120 @@
+.border-thin{
+    border-style: solid;
+    border-width: 1px;
+}
+.bg-xlight{
+    background: white;
+}
+.bg-light{
+    background: #eee;
+}
+.bg-neutral{
+    background: #ccc;
+}
+.bg-dark{
+    background: #888;
+}
+.bg-xdark{
+    background: #333;
+}
+.bg-emphasis-primary{
+    background: #1679bc;    
+}
+.bg-emphasis-secondary{
+    background: #0b4574;
+}
+.bg-emphasis-tertiary{
+    background: #cc7000;
+}
+
+.text-xlight{
+    color: white;
+}
+.text-light{
+    color: #eee;
+}
+.text-neutral{
+    color: #ccc;
+}
+.text-dark{
+    color: #888;
+}
+.text-xdark{
+    color: #333;
+}
+.text-emphasis-primary{
+    color: #1679bc;
+}
+.text-emphasis-secondary{
+    color: #0b4574;
+}
+.text-emphasis-tertiary{
+    color: #cc7000;
+}
+
+.border-xlight{
+    border-color: white;
+}
+.border-light{
+    border-color: #eee;
+}
+.border-neutral{
+    border-color: #ccc;
+}
+.border-dark{
+    border-color: #888;
+}
+.border-xdark{
+    border-color: #333;
+}
+.border-emphasis-primary{
+    border-color: #1679bc;
+}
+.border-emphasis-secondary{
+    border-color: #0b4574;
+}
+.border-emphasis-tertiary{
+    border-color: #cc7000;
+}
+.box{
+    display: inline-block;
+    padding: 15px;
+}
+
+.box form{
+    padding: 0 15px;
+}
+.header{
+    font-size: 1.5em;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.sub-header{
+    font-weight: bold;
+}
+
+.emphasis{
+
+}
+
+.subtle{
+
+}
+img{
+    vertical-align: middle;
+}
+
+img.thumb-med{
+    width: 100px;
+}
+img.thumb-sm{
+    width: 50px;
+}
+img.thumb-xsm{
+    width: 25px;
+}
 .nav>li>a:focus, .nav>li>a:hover {
     background: white;
 }
@@ -55,6 +172,15 @@ nav.navbar{
     padding-left: 20px;
     font-size: 1.7em;
 }
+.relative{
+    position: relative;
+}
+.absolute{
+    position: absolute;
+}
+.inline-block{
+    display: inline-block;
+}
 @font-face {
     font-family: 'Open Sans';
     src: url("/css/OpenSans-Light.ttf");
@@ -75,4 +201,12 @@ body{
 
 .padding-top-10{
     padding-top: 100px;
+}
+.space-below{
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.padding-sm{
+    padding: 5px;
 }

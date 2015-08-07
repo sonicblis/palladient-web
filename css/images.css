@@ -1,0 +1,13 @@
+img{
+    vertical-align: middle;
+}
+
+img.thumb-med{
+    width: 100px;
+}
+img.thumb-sm{
+    width: 50px;
+}
+img.thumb-xsm{
+    width: 25px;
+}

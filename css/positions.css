@@ -1,0 +1,9 @@
+.relative{
+    position: relative;
+}
+.absolute{
+    position: absolute;
+}
+.inline-block{
+    display: inline-block;
+}

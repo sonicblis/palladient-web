@@ -36,7 +36,7 @@ gulp.task('webServer', function() {
         },
         files: 'dist/*.*'
     });
-    gulp.watch("index.html").on('change', browser.reload);
+    gulp.watch(['index.html', "app/**/*.html"]).on('change', browser.reload);
 });
 
 gulp.task('publish', ['unify-prod', 'deploy']);
