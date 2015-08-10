@@ -1,7 +1,7 @@
 /*jshint globalstrict: true*/
 "use strict";
 
-var app = angular.module("app", ['ui.router']);
+var app = angular.module("app", ['ui.router', 'ui.bootstrap', 'ngAnimate']);
 
 app.run(['$rootScope', function($rootScope){
     $rootScope.patterns = {
@@ -14,7 +14,7 @@ app.run(['$rootScope', function($rootScope){
 app.directive("indicator", function(){
     return {
         restrict: 'E',
-        link: function(scope, el, attrs){
+        link: function(scope, el){
             el.addClass("indicator");
         }
     };
@@ -66,7 +66,16 @@ app.controller("landingController", ['$scope', function($scope){
         {
             image: 'http://www.herveybayit.com.au/images/business.jpg',
             quote: '"Palladient didn\'t just improve things, it changed everything"',
-            attribution: "Microsoft.com"
+            attribution: "Microsoft.com",
+            textStyle: 'text-visible-inverse',
+            textPosition: {top: '20px', left: '20px', width: '60%'}
+        },
+        {
+            image: 'https://cdn.pbrd.co/images/2CjG2YFl.png',
+            quote: '"We used to have to think.  Now, computers think for us."',
+            attribution: 'United Nations',
+            textStyle: 'text-visible',
+            textPosition: {bottom: '20px', width: '100%'}
         }
     ];
 }]);
@@ -76,7 +85,7 @@ app.controller("landingController", ['$scope', function($scope){
 app.config(function($stateProvider, $urlRouterProvider){
 
     // For any unmatched url, send to /route1
-    $urlRouterProvider.otherwise("/")
+    $urlRouterProvider.otherwise("/");
 
     $stateProvider
         .state('/', {url: '/', templateUrl: '/app/Info/landing.html'})
@@ -98,7 +107,7 @@ app.config(function($stateProvider, $urlRouterProvider){
             templateUrl: "partials/shop/shop.html"
         }
     );
-})
+});
 app.controller("loginController", ['$scope', function($scope){
 
 }]);

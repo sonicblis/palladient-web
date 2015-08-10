@@ -1,10 +1,10 @@
 <div ng-controller="landingController" id="splash" style="display:none;" class="container">
-    <carousel interval="5">
+    <carousel interval="8000">
         <slide ng-repeat="slide in slides" active="slide.active">
             <img ng-src="{{slide.image}}" style="margin:auto; width: 1140px;">
-            <div class="absolute" style="top: 20px; left: 20px; width: 60%;">
-                <div class="text-xlg text-visible-inverse">{{slide.quote}}</div>
-                <div class="text-visible-inverse">- {{slide.attribution}}</div>
+            <div class="absolute" ng-style="slide.textPosition">
+                <div class="text-xlg" ng-class="slide.textStyle">{{slide.quote}}</div>
+                <div class="{{slide.textStyle}}">- {{slide.attribution}}</div>
             </div>
         </slide>
     </carousel>
@@ -35,7 +35,7 @@
             if (welcomeIndex == welcomes.length){
                 $("#splash").fadeIn(500);
             }
-        };
+        }
 
         showNext(welcomeIndex);
     })();

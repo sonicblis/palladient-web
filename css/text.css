@@ -5,5 +5,10 @@
     font-size: 4em;
 }
 .text-visible-inverse{
+    color: #555;
     text-shadow: 1px 1px 0 white, -1px 1px 0 white, 1px -1px 0 white, -1px -1px 0 white;
+}
+.text-visible{
+    color: white;
+    text-shadow: 1px 1px 0 #333, -1px 1px 0 #333, 1px -1px 0 #333, -1px -1px 0 #333;
 }

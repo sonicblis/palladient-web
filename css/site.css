@@ -15,3 +15,10 @@ body{
 .centered-content{
     text-align: center;
 }
+
+.carousel-control>.glyphicon{
+    display:none;
+}
+.carousel-control{
+    background-image: none !important;
+}
