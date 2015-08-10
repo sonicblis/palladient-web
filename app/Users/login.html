@@ -1,23 +1,12 @@
-<div class="text-center">
-    <div class="box bg-light border-neutral border-thin">
-        <span class="header">Start Building Workflows</span>
-        <span class="space-below">Create an account for your 30 day free trial</span>
-        <form class="form-horizontal">
-            <div class="form-group">
-                <input class="form-control" placeholder="Your Name" type="text">
-            </div>
-            <div class="form-group">
-                <input class="form-control" placeholder="Your E-mail">
-            </div>
-            <div class="form-group">
-                <input class="form-control" placeholder="Your Company Name">
-            </div>
-            <button class="btn-success btn">Get Started</button>
-        </form><br/>
-        <line-with-text><b>OR</b></line-with-text><br />
-        <div class="btn btn-default relative">
-            <img class="thumb-xsm absolute" style="top:4px;left:4px;" src="/img/Google.png">
-            <span class="inline-block" style="padding-left: 23px;">Sign in with Google</span>
-        </div>
+<form ng-controller="loginController" name="login" ng-submit="account.login">
+    <span validation-field="login.email.$valid">
+        <input ng-model="account.email" class="form-control" name="email" required="true" ng-pattern="patterns.email" placeholder="E-mail" autofocus>
+    </span>
+    <span validation-field="login.password.$valid">
+        <input ng-model="account.password" name="password" required="true" ng-pattern="patterns.password" class="form-control" placeholder="Password" type="password" ng-enter="">
+    </span>
+    <div class="form-group">
+        <button type="submit" ng-disabled="login.$valid == false" class="btn btn-primary">Login</button>
+        <span class="pull-right space-above-small"><a>Forgot Password</a></span>
     </div>
-</div>
+</form>

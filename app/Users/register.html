@@ -1,0 +1,23 @@
+<div class="text-center" ng-controller="registerController">
+    <div class="box bg-light border-neutral border-thin" style="margin-top: 30px;">
+        <span class="header">Start Building Workflows</span>
+        <span class="space-below">Create an account for your 30 day free trial</span>
+        <form ng-submit="account.register()" class="form-horizontal" name="register">
+            <span validation-field="register.accountName.$valid">
+                <input ng-model="account.name" ng-pattern="patterns.name" name="accountName" required="true" class="form-control" placeholder="Your Name" type="text">
+            </span>
+            <span validation-field="register.accountEmail.$valid">
+                <input ng-model="account.email" name="accountEmail" required="true" ng-pattern="patterns.email" class="form-control" placeholder="Your E-mail">
+            </span>
+            <span validation-field="register.accountCompany.$valid">
+                <input ng-model="account.company" name="accountCompany" class="form-control" required="true" placeholder="Your Company Name">
+            </span>
+            <button type="submit" class="btn-success btn">Get Started</button>
+        </form><br/>
+        <line-with-text><b>OR</b></line-with-text><br />
+        <div class="btn btn-default relative" ng-click="account.federateWithGoogle()">
+            <img class="thumb-xsm absolute" style="top:4px;left:4px;" src="/img/Google.png">
+            <span class="inline-block" style="padding-left: 23px;">Sign in with Google</span>
+        </div>
+    </div>
+</div>

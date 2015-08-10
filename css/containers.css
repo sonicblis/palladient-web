@@ -6,3 +6,7 @@
 .box form{
     padding: 0 15px;
 }
+
+.container, .container-fluid{
+    position: relative;
+}

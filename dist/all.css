@@ -76,6 +76,9 @@
 .border-emphasis-tertiary{
     border-color: #cc7000;
 }
+.text-visible-inverse{
+    color: #888;
+}
 .box{
     display: inline-block;
     padding: 15px;
@@ -83,6 +86,13 @@
 
 .box form{
     padding: 0 15px;
+}
+
+.container, .container-fluid{
+    position: relative;
+}
+.form-control-feedback{
+    right: 0 !important;
 }
 .header{
     font-size: 1.5em;
@@ -172,6 +182,10 @@ nav.navbar{
     padding-left: 20px;
     font-size: 1.7em;
 }
+
+.navbar{
+    margin-bottom: 0;
+}
 .relative{
     position: relative;
 }
@@ -199,9 +213,6 @@ body{
     text-align: center;
 }
 
-.padding-top-10{
-    padding-top: 100px;
-}
 .space-below{
     margin-bottom: 10px;
     display: inline-block;
@@ -209,4 +220,22 @@ body{
 
 .padding-sm{
     padding: 5px;
+}
+
+.space-above{
+    margin-top: 10px;
+    display: inline-block;
+}
+.space-above-small{
+    margin-top: 5px;
+    display: inline-block;
+}
+.text-lg{
+    font-size: 3em;
+}
+.text-xlg{
+    font-size: 4em;
+}
+.text-visible-inverse{
+    text-shadow: 1px 1px 0 white, -1px 1px 0 white, 1px -1px 0 white, -1px -1px 0 white;
 }

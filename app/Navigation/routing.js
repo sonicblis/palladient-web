@@ -3,10 +3,11 @@
 app.config(function($stateProvider, $urlRouterProvider){
 
     // For any unmatched url, send to /route1
-    $urlRouterProvider.otherwise("/login")
+    $urlRouterProvider.otherwise("/")
 
     $stateProvider
-        .state('login', {url: '/login', templateUrl: '/app/Users/login.html'})
+        .state('/', {url: '/', templateUrl: '/app/Info/landing.html'})
+        .state('register', {url: '/register', templateUrl: '/app/Users/register.html'})
         .state('Design', {
             url: "/design",
             templateUrl: "partials/design/design.html"

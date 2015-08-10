@@ -3,11 +3,10 @@
 
 var app = angular.module("app", ['ui.router']);
 
-app.controller('pageController', ['$scope', function($scope){
-    $scope.pageName = 'My Hot Page';
-    $scope.getPageName = function(){
-        if (1 === 1){
-            return true;
-        }
+app.run(['$rootScope', function($rootScope){
+    $rootScope.patterns = {
+        email: '.+@.+\\..+',
+        password: '^(?=.*[A-Z])(?=.*[!@#$&*]).{8,}$',
+        name: '\\w+[ ]\\w+'
     };
 }]);

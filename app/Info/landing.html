@@ -1,0 +1,42 @@
+<div ng-controller="landingController" id="splash" style="display:none;" class="container">
+    <carousel interval="5">
+        <slide ng-repeat="slide in slides" active="slide.active">
+            <img ng-src="{{slide.image}}" style="margin:auto; width: 1140px;">
+            <div class="absolute" style="top: 20px; left: 20px; width: 60%;">
+                <div class="text-xlg text-visible-inverse">{{slide.quote}}</div>
+                <div class="text-visible-inverse">- {{slide.attribution}}</div>
+            </div>
+        </slide>
+    </carousel>
+</div>
+<div class="text-center colossal" style="padding-top:130px;">
+    <div class="welcome" style="display:none;">
+        Hello.
+    </div>
+    <div class="welcome" style="display:none;">
+        Welcome to Palladient
+    </div>
+    <div class="welcome" style="display:none;">
+        This is going to change everything
+    </div>
+</div>
+
+<script>
+    (function() {
+
+        var welcomes = $(".welcome");
+        var welcomeIndex = 0;
+
+        function showNext(welcomeIndex){
+            welcomes.eq(welcomeIndex)
+                    .fadeIn(1000)
+                    .delay(1000)
+                    .fadeOut(1000, function(){showNext(++welcomeIndex);});
+            if (welcomeIndex == welcomes.length){
+                $("#splash").fadeIn(500);
+            }
+        };
+
+        showNext(welcomeIndex);
+    })();
+</script>

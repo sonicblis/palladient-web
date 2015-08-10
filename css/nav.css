@@ -55,3 +55,7 @@ nav.navbar{
     padding-left: 20px;
     font-size: 1.7em;
 }
+
+.navbar{
+    margin-bottom: 0;
+}

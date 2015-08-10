@@ -6,3 +6,12 @@
 .padding-sm{
     padding: 5px;
 }
+
+.space-above{
+    margin-top: 10px;
+    display: inline-block;
+}
+.space-above-small{
+    margin-top: 5px;
+    display: inline-block;
+}
