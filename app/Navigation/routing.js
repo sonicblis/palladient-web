@@ -3,7 +3,7 @@
 app.config(function($stateProvider, $urlRouterProvider){
 
     // For any unmatched url, send to /route1
-    $urlRouterProvider.otherwise("/")
+    $urlRouterProvider.otherwise("/");
 
     $stateProvider
         .state('/', {url: '/', templateUrl: '/app/Info/landing.html'})
@@ -25,4 +25,4 @@ app.config(function($stateProvider, $urlRouterProvider){
             templateUrl: "partials/shop/shop.html"
         }
     );
-})
+});
