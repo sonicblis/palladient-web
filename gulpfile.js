@@ -5,6 +5,7 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var shell = require('gulp-shell');
 var watch = require('gulp-watch');
+var less = require('gulp-less');
 var browser = require('browser-sync');
 var reload = browser.reload;
 
@@ -14,8 +15,33 @@ var reload = browser.reload;
             .pipe(gulp.dest('dist/'));
     });
 
+    gulp.task('JSLibraries', function(){
+        gulp.src([
+            "node_modules/jquery/dist/jquery.min.js",
+            "node_modules/bootstrap/dist/js/bootstrap.min.js",
+            "node_modules/angular/angular.min.js",
+            "node_modules/ng-resource/lib/angular-resource.js",
+            "node_modules/angular-animate/angular-animate.min.js",
+            "node_modules/angular-ui-bootstrap/ui-bootstrap.min.js",
+            "node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.min.js",
+            "node_modules/angular-ui-router/release/angular-ui-router.min.js"
+        ])
+            .pipe(concat('jsLibraries.js'))
+            .pipe(gulp.dest('dist/'));
+    });
+
+    gulp.task('CssLibraries', function(){
+        gulp.src([
+            "node_modules/bootstrap/dist/css/bootstrap.min.css",
+            "node_modules/angular-ui-bootstrap/ui-bootstrap-csp.css"
+        ])
+            .pipe(concat('cssLibraries.css'))
+            .pipe(gulp.dest('dist/'));
+    });
+
     gulp.task('unifyCss', function() {
-        gulp.src('css/**/*.css')
+        gulp.src(['css/**/*.css','css/**/*.less'])
+            .pipe(less())
             .pipe(concat('all.css'))
             .pipe(gulp.dest('dist/'));
     });
