@@ -20,11 +20,12 @@ var reload = browser.reload;
             "node_modules/jquery/dist/jquery.min.js",
             "node_modules/bootstrap/dist/js/bootstrap.min.js",
             "node_modules/angular/angular.min.js",
-            "node_modules/ng-resource/lib/angular-resource.js",
+            "libraries/ng-resource.js",
             "node_modules/angular-animate/angular-animate.min.js",
             "node_modules/angular-ui-bootstrap/ui-bootstrap.min.js",
             "node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.min.js",
-            "node_modules/angular-ui-router/release/angular-ui-router.min.js"
+            "node_modules/angular-ui-router/release/angular-ui-router.min.js",
+            "node_modules/toastr/build/toastr.min.js"
         ])
             .pipe(concat('jsLibraries.js'))
             .pipe(gulp.dest('dist/'));
@@ -33,7 +34,8 @@ var reload = browser.reload;
     gulp.task('CssLibraries', function(){
         gulp.src([
             "node_modules/bootstrap/dist/css/bootstrap.min.css",
-            "node_modules/angular-ui-bootstrap/ui-bootstrap-csp.css"
+            "node_modules/angular-ui-bootstrap/ui-bootstrap-csp.css",
+            "node_modules/toastr/build/toastr.min.css"
         ])
             .pipe(concat('cssLibraries.css'))
             .pipe(gulp.dest('dist/'));

@@ -133,7 +133,7 @@ nav.navbar {
 
 @font-face {
   font-family: 'Open Sans';
-  src: url("/css/OpenSans-Light.ttf");
+  src: url("/fonts/OpenSans-Light.ttf");
 }
 body {
   font-family: 'Open Sans', serif;
