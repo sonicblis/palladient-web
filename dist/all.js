@@ -1,24 +1,36 @@
 /*jshint globalstrict: true*/
 "use strict";
 
-var app = angular.module("app", ['ui.router', 'ui.bootstrap', 'ngAnimate', 'ngResource', 'config']);
+var app = angular.module("app", ['ui.router', 'ui.bootstrap', 'ngAnimate', 'ngResource', 'config', 'satellizer']);
 
-app.config(['$httpProvider', '$resourceProvider', function($httpProvider){
-    ['errorHandler','httpLogger','requestCounter','requestQueue','resourceCreator'].forEach(function(interceptor){
-        $httpProvider.interceptors.push(interceptor);
-    });
-}]);
-
-app.run(['$rootScope', 'EventManager', function($rootScope){
+app.run(['$rootScope', '$window', 'GoogleAuthInfoProvider', function($rootScope, $window, GoogleAuthInfoProvider){
     $rootScope.patterns = {
         email: '.+@.+\\..+',
         password: '^(?=.*[A-Z])(?=.*[!@#$&*]).{8,}$',
         name: '\\w+[ ]\\w+'
     };
+    $rootScope.googleAuthEnabled = false;
     $rootScope.user = (sessionStorage.user) ? JSON.parse(sessionStorage.user) : {};
+    $rootScope.checkGoogleAuthResult = function(authResult){
+        $rootScope.googleAuthEnabled = !(authResult && authResult.error);
+        $rootScope.$digest();
+    };
+    $rootScope.initGooglAuth = function(){
+        $window.gapi.load('auth2', function(){
+            //sets up the AuthInstance for use in logging in/out/chcking login status/all sorts of stuff
+            $window.gapi.auth2.init();
+        });
+        $window.gapi.load('auth', function(){
+            //this call is to check if the user has connected google auth or not
+            $window.gapi.auth.authorize({
+                client_id: GoogleAuthInfoProvider.clientId,
+                scope: GoogleAuthInfoProvider.scope,
+                immediate: true
+            }, $rootScope.checkGoogleAuthResult);
+        });
+    };
     $rootScope.httpRequestsPending = 0;
     $rootScope.logout = function(){
-        console.log('logging out');
         $rootScope.user = {};
         delete sessionStorage.user;
     };
@@ -32,6 +44,16 @@ app.run(['$rootScope', 'EventManager', function($rootScope){
         TenantLoaded: 'TenantLoaded',
         UserLoaded: 'UserLoaded'
     };
+}]);
+app.config(['$httpProvider', '$logProvider', '$authProvider', function($httpProvider, $logProvider, $authProvider){
+    'use strict';
+    ['errorHandler','httpLogger','requestCounter','requestQueue','resourceCreator'].forEach(function(interceptor){
+        $httpProvider.interceptors.push(interceptor);
+    });
+    $logProvider.debugEnabled(false);
+    $authProvider.google({
+        clientId: '921192121163-jpmnst5i1q2jet14thmt0a1b2b03lhf4.apps.googleusercontent.com'
+    });
 }]);
 app.controller("landingController", ['$scope', function($scope){
     'use strict';
@@ -65,37 +87,71 @@ app.config(function($stateProvider, $urlRouterProvider){
         .state('register', {url: '/register', templateUrl: '/app/Users/register.html'})
         .state('Design', {
             url: "/design",
-            templateUrl: "partials/design/design.html"
+            templateUrl: "app/design/index.html"
         })
         .state('Configure', {
             url: "/configure",
-            templateUrl: "partials/configure/configure.html"
+            templateUrl: "app/configure/index.html"
         })
         .state('Work', {
             url: "/work",
-            templateUrl: "partials/work/work.html"
+            templateUrl: "app/work/index.html"
         })
         .state('Shop', {
             url: "/shop",
-            templateUrl: "partials/shop/shop.html"
+            templateUrl: "app/shop/index.html"
         }
     );
 });
-app.controller("loginController", ['$scope', function($scope){
+app.controller("loginController", ['$scope', 'API', '$rootScope', 'GoogleAuthInfoProvider', function($scope, API, $rootScope, GoogleAuthInfoProvider){
+    'use strict';
+    $scope.account = {
+        email: '',
+        password: ''
+    };
 
+    $scope.loginViaGoogle = function(result){
+        console.log(result);
+        var authResponse = result.getAuthResponse();
+        var token = authResponse.id_token;
+        API.users.get({token: token}, $scope.setUser);
+    };
+
+    $scope.authenticate = function(){
+        API.users.get($scope.account, $scope.setUser);
+    };
+
+    $scope.setUser = function(user){
+        $rootScope.user = user;
+        sessionStorage.user = JSON.stringify(user);
+    };
 }]);
 
-app.controller("registerController", ['$scope', 'API', function($scope, API){
+app.controller("registerController", ['$scope', 'API', '$auth', '$rootScope', '$window', 'GoogleAuthInfoProvider', function($scope, API, $auth, $rootScope, $window, GoogleAuthInfoProvider){
     'use strict';
+    $rootScope.$on("googleAuthInfoProvided", function(){
+        $scope.account.federateWithGoogle($window.googleAuthResult);
+    });
+
     $scope.account = {
         name: '',
         email: '',
         company: '',
+        authToken: '',
         register: function(){
             API.studios.save(this);
         },
-        federateWithGoogle: function(){
-            alert('you can not yet log in with google.');
+        federateWithGoogle: function(result){
+            if (result){
+                console.log('from controller: ', result);
+                var profileInfo = result.getBasicProfile();
+                var authInfo = result.getAuthResponse();
+                $scope.account.name = profileInfo.getName();
+                $scope.account.email = profileInfo.getEmail();
+                $scope.account.authToken = authInfo.id_token;
+                $rootScope.user.isGoogleAuthenticated = true;
+                $scope.$digest();
+            }
         }
     };
 }]);
@@ -194,7 +250,7 @@ app.service("EventManager", function () {
                     var indexOfDelegate = that.listeners[eventName].delegates.indexOf(delegate);
                     that.listeners[eventName].delegates.splice(indexOfDelegate, 1);
                 }
-            }
+            };
         },
         call: function (eventName, data, enableNoListenerWarning) {
             console.log('call to:', eventName);
@@ -212,6 +268,44 @@ app.service("EventManager", function () {
         }
     }
 });
+
+app.service("GoogleAuthInfoProvider", [function(){
+    'use strict';
+    this.clientId = '921192121163-jpmnst5i1q2jet14thmt0a1b2b03lhf4.apps.googleusercontent.com';
+    this.scope = 'https://www.googleapis.com/auth/plus.me';
+}]);
+
+app.directive('googleLogInButton', [function(){
+    'use strict';
+    return {
+        restrict: 'E',
+        scope: {
+            buttonId: '@',
+            onAuth: '&',
+            width: '@'
+        },
+        template: '<div id="{{buttonId}}" class="text-center"></div>',
+        controller: ['$scope', 'GoogleAuthInfoProvider', '$window', '$timeout', function($scope, GoogleAuthInfoProvider, $window, $timeout){
+            $scope.renderButton = function() {
+                $timeout(function() {
+                    $window.gapi.signin2.render($scope.buttonId, {
+                        'scope': GoogleAuthInfoProvider.scope,
+                        'width': $scope.width || 300,
+                        'height': 30,
+                        'longtitle': true,
+                        'theme': 'dark',
+                        'onsuccess': function(result){
+                            $scope.onAuth({result: result});
+                        }
+                    });
+                });
+            };
+        }],
+        link: function(scope, el, attrs){
+            scope.renderButton();
+        }
+    };
+}]);
 
 app.service('errorHandler', ['$q', '$injector', '$rootScope', '$log', function (q, injector, $rootScope, log) {
     'use strict';
@@ -251,19 +345,19 @@ app.service('errorHandler', ['$q', '$injector', '$rootScope', '$log', function (
 app.service('httpLogger', ['$log', function($log){
     'use strict';
     this.request = function(config){
-        $log.info('request: ', config);
+        $log.debug('request: ', config);
         return config;
     };
     this.requestError = function(config){
-        $log.info('request error: ', config);
+        $log.debug('request error: ', config);
         return config;
     };
     this.response = function(response){
-        $log.info('response: ', response);
+        $log.debug('response: ', response);
         return response;
     };
     this.responseError = function(response){
-        $log.info('response: ', response);
+        $log.debug('response: ', response);
         return response;
     };
 }]);

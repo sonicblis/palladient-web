@@ -9,15 +9,15 @@
             <span validation-field="register.accountEmail.$valid">
                 <input ng-model="account.email" name="accountEmail" required="true" ng-pattern="patterns.email" class="form-control" placeholder="Your E-mail">
             </span>
+            <div ng-hide="googleAuthEnabled">
+                <line-with-text><b>OR</b></line-with-text><br />
+                <google-log-in-button button-id="registerButton" on-auth="account.federateWithGoogle(result)"></google-log-in-button>
+                <br />
+            </div>
             <span validation-field="register.accountCompany.$valid">
                 <input ng-model="account.company" name="accountCompany" class="form-control" required="true" placeholder="Your Company Name">
             </span>
-            <button type="submit" class="btn-success btn">Get Started</button>
-        </form><br/>
-        <line-with-text><b>OR</b></line-with-text><br />
-        <div class="btn btn-default relative" ng-click="account.federateWithGoogle()">
-            <img class="thumb-xsm absolute" style="top:4px;left:4px;" src="/img/Google.png">
-            <span class="inline-block" style="padding-left: 23px;">Sign in with Google</span>
-        </div>
+            <button type="submit" ng-disabled="!register.$valid" class="btn-success btn">Get Started</button>
+        </form>
     </div>
 </div>

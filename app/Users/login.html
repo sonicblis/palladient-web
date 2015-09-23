@@ -1,12 +1,16 @@
-<form ng-controller="loginController" name="login" ng-submit="account.login">
+<form ng-controller="loginController" name="login" ng-submit="authenticate()">
     <span validation-field="login.email.$valid">
         <input ng-model="account.email" class="form-control" name="email" required="true" ng-pattern="patterns.email" placeholder="E-mail" autofocus>
     </span>
     <span validation-field="login.password.$valid">
-        <input ng-model="account.password" name="password" required="true" ng-pattern="patterns.password" class="form-control" placeholder="Password" type="password" ng-enter="">
+        <input ng-model="account.password" name="password" required="true" class="form-control" placeholder="Password" type="password" ng-enter="">
     </span>
     <div class="form-group">
-        <button type="submit" ng-disabled="login.$valid == false" class="btn btn-primary">Login</button>
+        <input type="submit" ng-disabled="login.$valid == false" class="btn btn-primary" value="Login" />
         <span class="pull-right space-above-small"><a>Forgot Password</a></span>
     </div>
+    <span ng-show="googleAuthEnabled">
+        <line-with-text><b>OR</b></line-with-text><br />
+        <google-log-in-button width="268" button-id="loginButton" on-auth="loginViaGoogle(result)"></google-log-in-button>
+    </span>
 </form>

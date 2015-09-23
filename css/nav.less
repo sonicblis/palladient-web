@@ -1,0 +1,77 @@
+.nav{
+    li {
+        a {
+            .indicator {
+                border-top: solid 4px transparent;
+                border-bottom: solid 4px transparent;
+                padding: 3px 0;
+            }
+            .indicator.active, .indicator:hover{
+                border-bottom: solid 6px #a9d596;
+                font-weight: bold;
+            }
+            &:focus, &:hover{
+                background: white;
+            }
+        }
+    }
+}
+
+.navbar-nav {
+    li.nav-square{
+        border: solid 1px #dddddd;
+        background: #eeeeee;
+        margin-right: 2px;
+    }
+    li.nav-square.preserve-size{
+        a {
+            line-height: 17px;
+        }
+    }
+    li.nav-square:not(.preserve-size){
+        a {
+            line-height: 10px;
+            padding-top:7px;
+            i {
+                font-size: 20px;
+            }
+        }
+    }
+    li {
+        a {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+    }
+}
+
+nav.navbar{
+    border-bottom: solid 1px #ccc;
+    min-height:10px;
+    height: 42px;
+}
+
+.navbar-logo{
+    position: absolute;
+    left: -5px;
+    top: 4px;
+    width: 22px;
+}
+
+.navbar-brand{
+    font-weight: bolder;
+    padding-left: 20px;
+    font-size: 1.7em;
+}
+
+.navbar{
+    margin-bottom: 0;
+}
+
+.navbar-right{
+    margin-right: 0;
+}
+
+#navbar{
+    margin-right: -30px;
+}

@@ -10,19 +10,19 @@ app.config(function($stateProvider, $urlRouterProvider){
         .state('register', {url: '/register', templateUrl: '/app/Users/register.html'})
         .state('Design', {
             url: "/design",
-            templateUrl: "partials/design/design.html"
+            templateUrl: "app/design/index.html"
         })
         .state('Configure', {
             url: "/configure",
-            templateUrl: "partials/configure/configure.html"
+            templateUrl: "app/configure/index.html"
         })
         .state('Work', {
             url: "/work",
-            templateUrl: "partials/work/work.html"
+            templateUrl: "app/work/index.html"
         })
         .state('Shop', {
             url: "/shop",
-            templateUrl: "partials/shop/shop.html"
+            templateUrl: "app/shop/index.html"
         }
     );
 });

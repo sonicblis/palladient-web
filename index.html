@@ -10,9 +10,14 @@
     <script type="text/javascript" src="config.js"></script>
     <script type="text/javascript" src="dist/all.js"></script>
 
-    <title></title>
+    <!-- google integration -->
+
+    <script src="https://apis.google.com/js/platform.js"></script>
+    <meta name="google-signin-client_id" content="921192121163-jpmnst5i1q2jet14thmt0a1b2b03lhf4.apps.googleusercontent.com">
+
+    <title>Palladient</title>
 </head>
-<body ng-app="app">
+<body ng-app="app" ng-init="initGooglAuth()">
     <div class="container-fluid">
         <nav class="navbar">
             <div class="container-fluid">

@@ -68,59 +68,6 @@ img.thumb-xsm {
   width: 25px;
 }
 
-.nav > li > a:focus,
-.nav > li > a:hover {
-  background: white;
-}
-.nav > li > a > .indicator {
-  border-top: solid 4px transparent;
-  border-bottom: solid 4px transparent;
-  padding: 3px 0;
-}
-.nav > li > a > .indicator.active,
-.nav > li > a > .indicator:hover {
-  border-bottom: solid 6px #a9d596;
-  font-weight: bold;
-}
-.navbar-nav > li > a {
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-.navbar-nav > li.nav-square:not(.preserve-size) > a > i {
-  font-size: 20px;
-}
-.navbar-nav > li.nav-square {
-  border: solid 1px #dddddd;
-  background: #eeeeee;
-  margin-right: 2px;
-}
-.navbar-nav > li.nav-square:not(.preserve-size) > a {
-  line-height: 10px;
-  padding-top: 7px;
-}
-.navbar-nav > li.nav-square.preserve-size > a {
-  line-height: 17px;
-}
-nav.navbar {
-  border-bottom: solid 1px #ccc;
-  min-height: 10px;
-  height: 42px;
-}
-.navbar-logo {
-  position: absolute;
-  left: -5px;
-  top: 4px;
-  width: 22px;
-}
-.navbar-brand {
-  font-weight: bolder;
-  padding-left: 20px;
-  font-size: 1.7em;
-}
-.navbar {
-  margin-bottom: 0;
-}
-
 .relative {
   position: relative;
 }
@@ -150,22 +97,6 @@ body {
 }
 .carousel-control {
   background-image: none !important;
-}
-
-.space-below {
-  margin-bottom: 10px;
-  display: inline-block;
-}
-.padding-sm {
-  padding: 5px;
-}
-.space-above {
-  margin-top: 10px;
-  display: inline-block;
-}
-.space-above-small {
-  margin-top: 5px;
-  display: inline-block;
 }
 
 .text-lg {
@@ -254,4 +185,91 @@ body {
 }
 .border-emphasis-tertiary {
   border-color: #cc7000;
+}
+
+.nav li a .indicator {
+  border-top: solid 4px transparent;
+  border-bottom: solid 4px transparent;
+  padding: 3px 0;
+}
+.nav li a .indicator.active,
+.nav li a .indicator:hover {
+  border-bottom: solid 6px #a9d596;
+  font-weight: bold;
+}
+.nav li a:focus,
+.nav li a:hover {
+  background: white;
+}
+.navbar-nav li.nav-square {
+  border: solid 1px #dddddd;
+  background: #eeeeee;
+  margin-right: 2px;
+}
+.navbar-nav li.nav-square.preserve-size a {
+  line-height: 17px;
+}
+.navbar-nav li.nav-square:not(.preserve-size) a {
+  line-height: 10px;
+  padding-top: 7px;
+}
+.navbar-nav li.nav-square:not(.preserve-size) a i {
+  font-size: 20px;
+}
+.navbar-nav li a {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+nav.navbar {
+  border-bottom: solid 1px #ccc;
+  min-height: 10px;
+  height: 42px;
+}
+.navbar-logo {
+  position: absolute;
+  left: -5px;
+  top: 4px;
+  width: 22px;
+}
+.navbar-brand {
+  font-weight: bolder;
+  padding-left: 20px;
+  font-size: 1.7em;
+}
+.navbar {
+  margin-bottom: 0;
+}
+.navbar-right {
+  margin-right: 0;
+}
+#navbar {
+  margin-right: -30px;
+}
+
+.space-below {
+  margin-bottom: 10px;
+  display: inline-block;
+}
+.padding-sm {
+  padding: 5px;
+}
+.space-right {
+  margin-right: 10px;
+}
+.space-right-sm {
+  margin-right: 5px;
+}
+.padding-right {
+  padding-right: 10px;
+}
+.padding-right-sm {
+  padding-right: 5px;
+}
+.space-above {
+  margin-top: 10px;
+  display: inline-block;
+}
+.space-above-small {
+  margin-top: 5px;
+  display: inline-block;
 }

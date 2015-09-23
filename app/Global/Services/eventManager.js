@@ -25,7 +25,7 @@ app.service("EventManager", function () {
                     var indexOfDelegate = that.listeners[eventName].delegates.indexOf(delegate);
                     that.listeners[eventName].delegates.splice(indexOfDelegate, 1);
                 }
-            }
+            };
         },
         call: function (eventName, data, enableNoListenerWarning) {
             console.log('call to:', eventName);
