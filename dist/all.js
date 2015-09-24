@@ -90,22 +90,44 @@ app.config(function($stateProvider, $urlRouterProvider){
 /**
  * Created by Palladient Dev on 9/22/2015.
  */
-app.service("accountService", ['API', function(API){
+app.service("accountService", ['API', '$q', function(API, $q){
     'use strict';
     var _this = this;
-    this.account = {};
+    this.account = {
+        name: '',
+        email: '',
+        company: ''
+    };
 
     this.account.registerAccount = function(){
-        API.studios.save(_this.account);
+        var defer = $q.defer();
+        API.studios.save(_this.account, function(result){
+            defer.resolve(result);
+        });
+        return defer.promise;
     };
     this.account.login = function(){
-        API.users.get(_this.account);
+        return API.users.get(_this.account);
     };
-    this.account.login = function(){
-        API.users.patch(_this.account);
+    this.account.acceptInvitation = function(){
+        if (!_this.account.invitation){
+            alert('This account isn\'t associated with an invitation to accept');
+        }
+        else{
+            _this.account.invitation.status = "Accepted";
+            API.invitations.update(_this.account.invitation);
+        }
     };
-    this.account.getInvite = function(inviteId){
-        API.invitations.get({id: inviteId});
+    this.account.getFromInvite = function(inviteId){
+        var defer = $q.defer();
+        API.invitations.get({id: inviteId}, function(invitation){
+            _this.account.name = invitation.subscriberFirstName + " " + invitation.subscriberLastName;
+            _this.account.email = invitation.subscriberEmailAddress;
+            _this.account.company = invitation.subscriberCompanyName;
+            _this.account.invitation = invitation;
+            defer.resolve(invitation);
+        });
+        return defer.promise;
     };
 }]);
 app.controller("ConfirmationController", ['$scope', '$stateParams', 'accountService', function($scope, $stateParams, accountService){
@@ -113,9 +135,7 @@ app.controller("ConfirmationController", ['$scope', '$stateParams', 'accountServ
     $scope.account = accountService.account;
 
     //try to accept the invitation
-    var invite = $scope.account.getInvite($stateParams.inviteId);
-    invite.status = "Accepted";
-    invite.update();
+    $scope.account.getFromInvite($stateParams.inviteId);
 }]);
 
 app.controller("loginController", ['$scope', 'accountService', function($scope, accountService){
@@ -142,6 +162,26 @@ app.directive('lineWithText', function(){
         restrict: 'E',
         transclude: true,
         template: "<div style=\"border-bottom: solid 1px #ccc; height: 10px; overflow: visible;\"><span style=\"padding: 0 5px; background: #eee;\"><ng-transclude></ng-transclude></span></div>"
+    };
+});
+
+app.directive("mustMatch", function() {
+    'use strict';
+    return {
+        require: "ngModel",
+        scope: {
+            otherModelValue: "=mustMatch"
+        },
+        link: function(scope, element, attributes, ngModel) {
+
+            ngModel.$validators.compareTo = function(modelValue) {
+                return modelValue === scope.otherModelValue;
+            };
+
+            scope.$watch("otherModelValue", function() {
+                ngModel.$validate();
+            });
+        }
     };
 });
 

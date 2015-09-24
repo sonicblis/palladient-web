@@ -1,3 +1,22 @@
 <div ng-controller="ConfirmationController">
-
+    <div class="text-center">
+        <div class="box bg-light border-neutral border-thin" style="margin-top: 30px;">
+            <div class="header">
+                <span ng-hide="account.invitation">Looking up your account information...</span>
+                <span ng-show="account.invitation">
+                    Welcome back {{account.name}}!
+                </span>
+            </div>
+            <span ng-show="account.invitation" class="space-below">We need a password for your account,<br />and then we're all done.</span>
+            <form ng-show="account.invitation" name="inviteAccept" ng-submit="account.acceptInvitation()">
+                <span validation-field="inviteAccept.initialPassword.$valid">
+                    <input autofocus ng-model="account.invitation.password" type="password" name="initialPassword" required="true" ng-pattern="patterns.password" class="form-control" placeholder="Password">
+                </span>
+                <span validation-field="inviteAccept.initialPasswordConfirmation.$valid">
+                    <input must-match="account.invitation.password" ng-model="account.invitation.passwordConfirmation" type="password" name="initialPasswordConfirmation" required="true" ng-pattern="patterns.password" class="form-control" placeholder="Confirm Password">
+                </span>
+                <button ng-disabled="inviteAccept.$valid === false" type="submit" class="btn btn-primary">Let's Go!</button>
+            </form>
+        </div>
+    </div>
 </div>

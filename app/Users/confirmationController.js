@@ -3,7 +3,5 @@ app.controller("ConfirmationController", ['$scope', '$stateParams', 'accountServ
     $scope.account = accountService.account;
 
     //try to accept the invitation
-    var invite = $scope.account.getInvite($stateParams.inviteId);
-    invite.status = "Accepted";
-    invite.update();
+    $scope.account.getFromInvite($stateParams.inviteId);
 }]);
