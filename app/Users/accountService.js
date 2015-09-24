@@ -7,12 +7,14 @@ app.service("accountService", ['API', '$q', function(API, $q){
     this.account = {
         name: '',
         email: '',
-        company: ''
+        company: '',
+        registered: true
     };
 
     this.account.registerAccount = function(){
         var defer = $q.defer();
         API.studios.save(_this.account, function(result){
+            _this.account.registered = true;
             defer.resolve(result);
         });
         return defer.promise;

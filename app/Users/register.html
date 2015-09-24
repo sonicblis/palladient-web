@@ -1,5 +1,5 @@
 <div class="text-center" ng-controller="registerController">
-    <div class="box bg-light border-neutral border-thin" style="margin-top: 30px;">
+    <div ng-hide="account.registered" class="box bg-light border-neutral border-thin" style="margin-top: 30px;">
         <span class="header">Start Building Workflows</span>
         <span class="space-below">Create an account for your 30 day free trial</span>
         <form ng-submit="account.registerAccount()" class="form-horizontal" name="register">
@@ -18,6 +18,13 @@
         <div class="btn btn-default relative" ng-click="account.federateWithGoogle()">
             <img class="thumb-xsm absolute" style="top:4px;left:4px;" src="/img/Google.png">
             <span class="inline-block" style="padding-left: 23px;">Sign in with Google</span>
+        </div>
+    </div>
+    <div ng-show="account.registered">
+        <div class="space-above"></div>
+        <div class="header">Awesome!</div>
+        <div>
+            We're excited to show you how we can help.  We've sent you an e-mail with a link to validate your e-mail.
         </div>
     </div>
 </div>

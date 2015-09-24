@@ -112,6 +112,9 @@ nav.navbar {
   top: 4px;
   width: 22px;
 }
+.navbar-header {
+  width: 355px;
+}
 .navbar-brand {
   font-weight: bolder;
   padding-left: 20px;
