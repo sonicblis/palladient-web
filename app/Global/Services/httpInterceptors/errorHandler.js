@@ -1,4 +1,4 @@
-app.service('errorHandler', ['$q', '$injector', '$rootScope', '$log', function (q, injector, $rootScope, log) {
+app.service('errorHandler', ['$q', '$injector', function (q, injector) {
     'use strict';
     function tryGetInnerExceptionMessage(payload){
         if (payload.innerException){
@@ -11,12 +11,28 @@ app.service('errorHandler', ['$q', '$injector', '$rootScope', '$log', function (
             }
         }
         return undefined;
-
     }
+
+    this.response = function(response){
+        if (response.status > 399) {
+            var details = (response.data) ?
+            tryGetInnerExceptionMessage(response.data) ||
+            response.data.exceptionMessage ||
+            response.data.messageDetail ||
+            response.data.message ||
+            "The url " + response.config.url + " resulted in " + response.status + ": " + response.statusText :
+                "No details available";
+            toastr.error(details, '', {closeButton: true, timeOut: 0});
+            if (details.indexOf('session has timed out') > -1){
+                var $state = injector.get("$state");
+                $state.go('login');
+            }
+        }
+        return response;
+    };
 
     this.responseError = function (response) {
         if (response.status) {
-            //TODO: recursively interrogate inner exceptions for the root message
             var details = (response.data) ?
                 tryGetInnerExceptionMessage(response.data) ||
                 response.data.exceptionMessage ||
@@ -30,6 +46,6 @@ app.service('errorHandler', ['$q', '$injector', '$rootScope', '$log', function (
                 $state.go('login');
             }
         }
-        return q.reject(response);
+        return response;
     };
 }]);

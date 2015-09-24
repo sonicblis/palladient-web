@@ -3,8 +3,10 @@
 
 var app = angular.module("app", ['ui.router', 'ui.bootstrap', 'ngAnimate', 'ngResource', 'config']);
 
-app.config(['$httpProvider', '$resourceProvider', function($httpProvider){
-    ['errorHandler','httpLogger','requestCounter','requestQueue','resourceCreator'].forEach(function(interceptor){
+app.config(['$httpProvider', '$logProvider', function($httpProvider, $logProvider){
+    $logProvider.debugEnabled(false);
+    var httpInterceptors = ['errorHandler','httpLogger','requestCounter','requestQueue','resourceCreator','basicAuthHeaderInjector'];
+    httpInterceptors.forEach(function(interceptor){
         $httpProvider.interceptors.push(interceptor);
     });
 }]);

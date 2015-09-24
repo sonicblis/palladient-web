@@ -10,7 +10,7 @@ app.service("EventManager", function () {
                 that.listeners[eventName] = {delegates: [delegate]};
             }
             else {
-                if (that.listeners[eventName].delegates.indexOf(delegate) == -1) { //maybe only register a listener once?
+                if (that.listeners[eventName].delegates.indexOf(delegate) === -1) { //maybe only register a listener once?
                     that.listeners[eventName].delegates.push(delegate);
                     if (that.listeners[eventName].lastData && !waitForNewData){
                         console.log('calling eventName with previous data', that.listeners[eventName].lastData);
@@ -25,7 +25,7 @@ app.service("EventManager", function () {
                     var indexOfDelegate = that.listeners[eventName].delegates.indexOf(delegate);
                     that.listeners[eventName].delegates.splice(indexOfDelegate, 1);
                 }
-            }
+            };
         },
         call: function (eventName, data, enableNoListenerWarning) {
             console.log('call to:', eventName);
@@ -41,5 +41,5 @@ app.service("EventManager", function () {
                 });
             }
         }
-    }
+    };
 });

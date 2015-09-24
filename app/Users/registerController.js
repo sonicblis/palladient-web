@@ -1,14 +1,4 @@
-app.controller("registerController", ['$scope', 'API', function($scope, API){
+app.controller("registerController", ['$scope', 'accountService', function($scope, accountService){
     'use strict';
-    $scope.account = {
-        name: '',
-        email: '',
-        company: '',
-        register: function(){
-            API.studios.save(this);
-        },
-        federateWithGoogle: function(){
-            alert('you can not yet log in with google.');
-        }
-    };
+    $scope.account = accountService.account;
 }]);

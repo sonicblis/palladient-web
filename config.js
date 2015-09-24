@@ -1,4 +1,4 @@
 angular.module('config', [])
     .constant('config', {
-        apiHostUrl: 'http://localhost/palladient.api/'
+        apiHostUrl: 'http://localhost/palladient.studios.api/'
     });

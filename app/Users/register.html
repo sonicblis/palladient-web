@@ -2,7 +2,7 @@
     <div class="box bg-light border-neutral border-thin" style="margin-top: 30px;">
         <span class="header">Start Building Workflows</span>
         <span class="space-below">Create an account for your 30 day free trial</span>
-        <form ng-submit="account.register()" class="form-horizontal" name="register">
+        <form ng-submit="account.registerAccount()" class="form-horizontal" name="register">
             <span validation-field="register.accountName.$valid">
                 <input ng-model="account.name" ng-pattern="patterns.name" name="accountName" required="true" class="form-control" placeholder="Your Name" type="text">
             </span>

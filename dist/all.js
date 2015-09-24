@@ -3,8 +3,10 @@
 
 var app = angular.module("app", ['ui.router', 'ui.bootstrap', 'ngAnimate', 'ngResource', 'config']);
 
-app.config(['$httpProvider', '$resourceProvider', function($httpProvider){
-    ['errorHandler','httpLogger','requestCounter','requestQueue','resourceCreator'].forEach(function(interceptor){
+app.config(['$httpProvider', '$logProvider', function($httpProvider, $logProvider){
+    $logProvider.debugEnabled(false);
+    var httpInterceptors = ['errorHandler','httpLogger','requestCounter','requestQueue','resourceCreator','basicAuthHeaderInjector'];
+    httpInterceptors.forEach(function(interceptor){
         $httpProvider.interceptors.push(interceptor);
     });
 }]);
@@ -78,26 +80,51 @@ app.config(function($stateProvider, $urlRouterProvider){
         .state('Shop', {
             url: "/shop",
             templateUrl: "partials/shop/shop.html"
+        })
+        .state('Confirm', {
+            url: "/confirm/:inviteId",
+            templateUrl: "app/Users/confirmation.html"
         }
     );
 });
-app.controller("loginController", ['$scope', function($scope){
+/**
+ * Created by Palladient Dev on 9/22/2015.
+ */
+app.service("accountService", ['API', function(API){
+    'use strict';
+    var _this = this;
+    this.account = {};
 
+    this.account.registerAccount = function(){
+        API.studios.save(_this.account);
+    };
+    this.account.login = function(){
+        API.users.get(_this.account);
+    };
+    this.account.login = function(){
+        API.users.patch(_this.account);
+    };
+    this.account.getInvite = function(inviteId){
+        API.invitations.get({id: inviteId});
+    };
+}]);
+app.controller("ConfirmationController", ['$scope', '$stateParams', 'accountService', function($scope, $stateParams, accountService){
+    'use strict';
+    $scope.account = accountService.account;
+
+    //try to accept the invitation
+    var invite = $scope.account.getInvite($stateParams.inviteId);
+    invite.status = "Accepted";
+    invite.update();
 }]);
 
-app.controller("registerController", ['$scope', 'API', function($scope, API){
+app.controller("loginController", ['$scope', 'accountService', function($scope, accountService){
     'use strict';
-    $scope.account = {
-        name: '',
-        email: '',
-        company: '',
-        register: function(){
-            API.studios.save(this);
-        },
-        federateWithGoogle: function(){
-            alert('you can not yet log in with google.');
-        }
-    };
+    $scope.account = accountService.account;
+}]);
+app.controller("registerController", ['$scope', 'accountService', function($scope, accountService){
+    'use strict';
+    $scope.account = accountService.account;
 }]);
 
 'use strict';
@@ -154,16 +181,18 @@ app.directive("validationField", ['$parse', function($parse){
     'use strict';
     app.service('API', ['$resource', 'config', function (resource, config) {
         var resourceParams = {id: '@id'};
-        var resourceConfig = {update: {method: 'PUT'}};
-        var makeResource = function(resourceName){
-            return resource(config.apiHostUrl + 'api/' + resourceName + "/:id", resourceParams, resourceConfig);
-        };
+        var resourceConfig = {update: {method: 'PUT'}, patch: {method: 'PATCH'}};
 
+        function makeResource(resourceName){
+            return resource(config.apiHostUrl + 'api/' + resourceName + "/:id", resourceParams, resourceConfig);
+        }
         this.makeResourceFromUrl = function(url){
             return resource(url + "/:id", resourceParams, resourceConfig);
         };
+
         this.studios = makeResource('studios');
         this.users = makeResource('users');
+        this.invitations = makeResource('invitations');
     }]);
 })();
 
@@ -179,7 +208,7 @@ app.service("EventManager", function () {
                 that.listeners[eventName] = {delegates: [delegate]};
             }
             else {
-                if (that.listeners[eventName].delegates.indexOf(delegate) == -1) { //maybe only register a listener once?
+                if (that.listeners[eventName].delegates.indexOf(delegate) === -1) { //maybe only register a listener once?
                     that.listeners[eventName].delegates.push(delegate);
                     if (that.listeners[eventName].lastData && !waitForNewData){
                         console.log('calling eventName with previous data', that.listeners[eventName].lastData);
@@ -194,7 +223,7 @@ app.service("EventManager", function () {
                     var indexOfDelegate = that.listeners[eventName].delegates.indexOf(delegate);
                     that.listeners[eventName].delegates.splice(indexOfDelegate, 1);
                 }
-            }
+            };
         },
         call: function (eventName, data, enableNoListenerWarning) {
             console.log('call to:', eventName);
@@ -210,10 +239,26 @@ app.service("EventManager", function () {
                 });
             }
         }
-    }
+    };
 });
 
-app.service('errorHandler', ['$q', '$injector', '$rootScope', '$log', function (q, injector, $rootScope, log) {
+/**
+ * Created by Palladient Dev on 9/23/2015.
+ */
+app.service('basicAuthHeaderInjector', [function() {
+    'use strict';
+    this.request = function (config) {
+        if (config.params && config.params.email && config.params.password) {
+            config.headers.Authorization = 'Basic ' + btoa(config.params.email + ":" + config.params.password); //base64 encoded username:password
+            config.params = undefined;
+        }
+        if (config.params && config.params.password){
+            delete config.params.password; //never send a password field, come on man, what are you doing
+        }
+        return config;
+    };
+}]);
+app.service('errorHandler', ['$q', '$injector', function (q, injector) {
     'use strict';
     function tryGetInnerExceptionMessage(payload){
         if (payload.innerException){
@@ -226,12 +271,28 @@ app.service('errorHandler', ['$q', '$injector', '$rootScope', '$log', function (
             }
         }
         return undefined;
-
     }
+
+    this.response = function(response){
+        if (response.status > 399) {
+            var details = (response.data) ?
+            tryGetInnerExceptionMessage(response.data) ||
+            response.data.exceptionMessage ||
+            response.data.messageDetail ||
+            response.data.message ||
+            "The url " + response.config.url + " resulted in " + response.status + ": " + response.statusText :
+                "No details available";
+            toastr.error(details, '', {closeButton: true, timeOut: 0});
+            if (details.indexOf('session has timed out') > -1){
+                var $state = injector.get("$state");
+                $state.go('login');
+            }
+        }
+        return response;
+    };
 
     this.responseError = function (response) {
         if (response.status) {
-            //TODO: recursively interrogate inner exceptions for the root message
             var details = (response.data) ?
                 tryGetInnerExceptionMessage(response.data) ||
                 response.data.exceptionMessage ||
@@ -245,25 +306,25 @@ app.service('errorHandler', ['$q', '$injector', '$rootScope', '$log', function (
                 $state.go('login');
             }
         }
-        return q.reject(response);
+        return response;
     };
 }]);
 app.service('httpLogger', ['$log', function($log){
     'use strict';
     this.request = function(config){
-        $log.info('request: ', config);
+        $log.debug('request: ', config);
         return config;
     };
     this.requestError = function(config){
-        $log.info('request error: ', config);
+        $log.debug('request error: ', config);
         return config;
     };
     this.response = function(response){
-        $log.info('response: ', response);
+        $log.debug('response: ', response);
         return response;
     };
     this.responseError = function(response){
-        $log.info('response: ', response);
+        $log.debug('response: ', response);
         return response;
     };
 }]);
@@ -314,6 +375,9 @@ app.service('requestQueue', ['$q', '$injector', '$rootScope', function(q, inject
                     return http(response.config);
                 }
             );
+        }
+        else{
+            return response;
         }
     };
 }]);

@@ -1,9 +1,9 @@
-<form ng-controller="loginController" name="login" ng-submit="account.login">
+<form ng-controller="loginController" name="login" ng-submit="account.login()">
     <span validation-field="login.email.$valid">
         <input ng-model="account.email" class="form-control" name="email" required="true" ng-pattern="patterns.email" placeholder="E-mail" autofocus>
     </span>
     <span validation-field="login.password.$valid">
-        <input ng-model="account.password" name="password" required="true" ng-pattern="patterns.password" class="form-control" placeholder="Password" type="password" ng-enter="">
+        <input ng-model="account.password" name="password" required="true" ng-pattern="patterns.password" class="form-control" placeholder="Password" type="password">
     </span>
     <div class="form-group">
         <button type="submit" ng-disabled="login.$valid == false" class="btn btn-primary">Login</button>

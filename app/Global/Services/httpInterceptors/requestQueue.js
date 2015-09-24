@@ -26,5 +26,8 @@ app.service('requestQueue', ['$q', '$injector', '$rootScope', function(q, inject
                 }
             );
         }
+        else{
+            return response;
+        }
     };
 }]);

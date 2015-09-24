@@ -23,6 +23,10 @@ app.config(function($stateProvider, $urlRouterProvider){
         .state('Shop', {
             url: "/shop",
             templateUrl: "partials/shop/shop.html"
+        })
+        .state('Confirm', {
+            url: "/confirm/:inviteId",
+            templateUrl: "app/Users/confirmation.html"
         }
     );
 });
