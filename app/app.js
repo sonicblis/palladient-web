@@ -5,7 +5,7 @@ var app = angular.module("app", ['ui.router', 'ui.bootstrap', 'ngAnimate', 'ngRe
 
 app.config(['$httpProvider', '$logProvider', function($httpProvider, $logProvider){
     $logProvider.debugEnabled(false);
-    var httpInterceptors = ['errorHandler','httpLogger','requestCounter','requestQueue','resourceCreator','basicAuthHeaderInjector'];
+    var httpInterceptors = ['errorHandler','requestCounter','httpLogger','requestQueue','resourceCreator','basicAuthHeaderInjector'];
     httpInterceptors.forEach(function(interceptor){
         $httpProvider.interceptors.push(interceptor);
     });
@@ -25,10 +25,10 @@ app.run(['$rootScope', 'EventManager', function($rootScope){
         delete sessionStorage.user;
     };
     $rootScope.removePendingRequest = function(){
-        $rootScope.httpRequestsPending++;
+        $rootScope.httpRequestsPending--;
     };
     $rootScope.addPendingRequest = function(){
-        $rootScope.httpRequestsPending--;
+        $rootScope.httpRequestsPending++;
     };
     $rootScope.events = {
         TenantLoaded: 'TenantLoaded',

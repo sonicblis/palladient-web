@@ -13,39 +13,21 @@ app.service('errorHandler', ['$q', '$injector', function (q, injector) {
         return undefined;
     }
 
-    this.response = function(response){
-        if (response.status > 399) {
-            var details = (response.data) ?
-            tryGetInnerExceptionMessage(response.data) ||
-            response.data.exceptionMessage ||
-            response.data.messageDetail ||
-            response.data.message ||
-            "The url " + response.config.url + " resulted in " + response.status + ": " + response.statusText :
-                "No details available";
-            toastr.error(details, '', {closeButton: true, timeOut: 0});
-            if (details.indexOf('session has timed out') > -1){
-                var $state = injector.get("$state");
-                $state.go('login');
-            }
-        }
-        return response;
-    };
+    function extractMessage(response){
+        return (response.data) ?
+        tryGetInnerExceptionMessage(response.data) ||
+        response.data.exceptionMessage ||
+        response.data.messageDetail ||
+        response.data.message ||
+        "The url " + response.config.url + " resulted in " + response.status + ": " + response.statusText :
+            "Request Error: No details available";
+    }
 
     this.responseError = function (response) {
         if (response.status) {
-            var details = (response.data) ?
-                tryGetInnerExceptionMessage(response.data) ||
-                response.data.exceptionMessage ||
-                response.data.messageDetail ||
-                response.data.message ||
-                "The url " + response.config.url + " resulted in " + response.status + ": " + response.statusText :
-                "No details available";
+            var details = extractMessage(response);
             toastr.error(details, '', {closeButton: true, timeOut: 0});
-            if (details.indexOf('session has timed out') > -1){
-                var $state = injector.get("$state");
-                $state.go('login');
-            }
         }
-        return response;
+        return q.reject(response);
     };
 }]);

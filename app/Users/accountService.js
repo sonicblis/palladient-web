@@ -8,7 +8,8 @@ app.service("accountService", ['API', '$q', function(API, $q){
         name: '',
         email: '',
         company: '',
-        registered: true
+        invitation: undefined,  //set when a user is verifying their e-mail address
+        registered: false       //used when the user is registering a new account
     };
 
     this.account.registerAccount = function(){

@@ -133,6 +133,9 @@ nav.navbar {
 .inline-block {
   display: inline-block;
 }
+.clear-both {
+  clear: both;
+}
 
 @font-face {
   font-family: 'Open Sans';
@@ -166,7 +169,7 @@ body {
   margin-top: 10px;
   display: inline-block;
 }
-.space-above-small {
+.space-above-sm {
   margin-top: 5px;
   display: inline-block;
 }

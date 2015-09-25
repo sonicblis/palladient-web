@@ -5,7 +5,7 @@ var app = angular.module("app", ['ui.router', 'ui.bootstrap', 'ngAnimate', 'ngRe
 
 app.config(['$httpProvider', '$logProvider', function($httpProvider, $logProvider){
     $logProvider.debugEnabled(false);
-    var httpInterceptors = ['errorHandler','httpLogger','requestCounter','requestQueue','resourceCreator','basicAuthHeaderInjector'];
+    var httpInterceptors = ['errorHandler','requestCounter','httpLogger','requestQueue','resourceCreator','basicAuthHeaderInjector'];
     httpInterceptors.forEach(function(interceptor){
         $httpProvider.interceptors.push(interceptor);
     });
@@ -25,10 +25,10 @@ app.run(['$rootScope', 'EventManager', function($rootScope){
         delete sessionStorage.user;
     };
     $rootScope.removePendingRequest = function(){
-        $rootScope.httpRequestsPending++;
+        $rootScope.httpRequestsPending--;
     };
     $rootScope.addPendingRequest = function(){
-        $rootScope.httpRequestsPending--;
+        $rootScope.httpRequestsPending++;
     };
     $rootScope.events = {
         TenantLoaded: 'TenantLoaded',
@@ -97,7 +97,8 @@ app.service("accountService", ['API', '$q', function(API, $q){
         name: '',
         email: '',
         company: '',
-        registered: true
+        invitation: undefined,  //set when a user is verifying their e-mail address
+        registered: false       //used when the user is registering a new account
     };
 
     this.account.registerAccount = function(){
@@ -315,63 +316,45 @@ app.service('errorHandler', ['$q', '$injector', function (q, injector) {
         return undefined;
     }
 
-    this.response = function(response){
-        if (response.status > 399) {
-            var details = (response.data) ?
-            tryGetInnerExceptionMessage(response.data) ||
-            response.data.exceptionMessage ||
-            response.data.messageDetail ||
-            response.data.message ||
-            "The url " + response.config.url + " resulted in " + response.status + ": " + response.statusText :
-                "No details available";
-            toastr.error(details, '', {closeButton: true, timeOut: 0});
-            if (details.indexOf('session has timed out') > -1){
-                var $state = injector.get("$state");
-                $state.go('login');
-            }
-        }
-        return response;
-    };
+    function extractMessage(response){
+        return (response.data) ?
+        tryGetInnerExceptionMessage(response.data) ||
+        response.data.exceptionMessage ||
+        response.data.messageDetail ||
+        response.data.message ||
+        "The url " + response.config.url + " resulted in " + response.status + ": " + response.statusText :
+            "Request Error: No details available";
+    }
 
     this.responseError = function (response) {
         if (response.status) {
-            var details = (response.data) ?
-                tryGetInnerExceptionMessage(response.data) ||
-                response.data.exceptionMessage ||
-                response.data.messageDetail ||
-                response.data.message ||
-                "The url " + response.config.url + " resulted in " + response.status + ": " + response.statusText :
-                "No details available";
+            var details = extractMessage(response);
             toastr.error(details, '', {closeButton: true, timeOut: 0});
-            if (details.indexOf('session has timed out') > -1){
-                var $state = injector.get("$state");
-                $state.go('login');
-            }
         }
-        return response;
+        return q.reject(response);
     };
 }]);
-app.service('httpLogger', ['$log', function($log){
+app.service('httpLogger', ['$log', '$rootScope', '$q', function($log, $rootScope, $q){
     'use strict';
     this.request = function(config){
-        $log.debug('request: ', config);
+        $log.debug('request ' + $rootScope.httpRequestsPending + ': ', config);
         return config;
     };
     this.requestError = function(config){
-        $log.debug('request error: ', config);
-        return config;
+        $log.debug('request error ' + $rootScope.httpRequestsPending + ': ', config);
+        return $q.reject(config);
     };
     this.response = function(response){
-        $log.debug('response: ', response);
+        $log.debug('response ' + $rootScope.httpRequestsPending + ': ', response);
         return response;
     };
     this.responseError = function(response){
-        $log.debug('response: ', response);
-        return response;
+        $log.debug('response ' + $rootScope.httpRequestsPending + ': ', response);
+        return $q.reject(response);
     };
 }]);
 
-app.service('requestCounter', ['$rootScope', function($rootScope){
+app.service('requestCounter', ['$rootScope', '$q', function($rootScope, $q){
     'use strict';
     this.request = function(config){
         $rootScope.addPendingRequest();
@@ -379,7 +362,7 @@ app.service('requestCounter', ['$rootScope', function($rootScope){
     };
     this.requestError = function(config){
         $rootScope.removePendingRequest();
-        return config;
+        return $q.reject(config);
     };
     this.response = function(response){
         $rootScope.removePendingRequest();
@@ -387,16 +370,16 @@ app.service('requestCounter', ['$rootScope', function($rootScope){
     };
     this.responseError = function(response){
         $rootScope.removePendingRequest();
-        return response;
+        return $q.reject(response);
     };
 }]);
-app.service('requestQueue', ['$q', '$injector', '$rootScope', function(q, injector, $rootScope){
+app.service('requestQueue', ['$q', '$injector', '$rootScope', function($q, injector, $rootScope){
     'use strict';
     var pendingAuthRequest;
 
     this.responseError = function(response){
         if (response.status === 403) {
-            var defer = q.defer();
+            var defer = $q.defer();
             var http = injector.get("$http");
             if (!pendingAuthRequest) { //if we've already requested auth, let's chain this to the pending request
                 pendingAuthRequest = $rootScope.requestCredentials();
@@ -419,7 +402,7 @@ app.service('requestQueue', ['$q', '$injector', '$rootScope', function(q, inject
             );
         }
         else{
-            return response;
+            return $q.reject(response);
         }
     };
 }]);

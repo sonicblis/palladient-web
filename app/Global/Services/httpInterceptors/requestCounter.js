@@ -1,4 +1,4 @@
-app.service('requestCounter', ['$rootScope', function($rootScope){
+app.service('requestCounter', ['$rootScope', '$q', function($rootScope, $q){
     'use strict';
     this.request = function(config){
         $rootScope.addPendingRequest();
@@ -6,7 +6,7 @@ app.service('requestCounter', ['$rootScope', function($rootScope){
     };
     this.requestError = function(config){
         $rootScope.removePendingRequest();
-        return config;
+        return $q.reject(config);
     };
     this.response = function(response){
         $rootScope.removePendingRequest();
@@ -14,6 +14,6 @@ app.service('requestCounter', ['$rootScope', function($rootScope){
     };
     this.responseError = function(response){
         $rootScope.removePendingRequest();
-        return response;
+        return $q.reject(response);
     };
 }]);

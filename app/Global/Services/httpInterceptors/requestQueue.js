@@ -1,10 +1,10 @@
-app.service('requestQueue', ['$q', '$injector', '$rootScope', function(q, injector, $rootScope){
+app.service('requestQueue', ['$q', '$injector', '$rootScope', function($q, injector, $rootScope){
     'use strict';
     var pendingAuthRequest;
 
     this.responseError = function(response){
         if (response.status === 403) {
-            var defer = q.defer();
+            var defer = $q.defer();
             var http = injector.get("$http");
             if (!pendingAuthRequest) { //if we've already requested auth, let's chain this to the pending request
                 pendingAuthRequest = $rootScope.requestCredentials();
@@ -27,7 +27,7 @@ app.service('requestQueue', ['$q', '$injector', '$rootScope', function(q, inject
             );
         }
         else{
-            return response;
+            return $q.reject(response);
         }
     };
 }]);

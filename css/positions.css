@@ -7,3 +7,6 @@
 .inline-block{
     display: inline-block;
 }
+.clear-both{
+    clear: both;
+}
